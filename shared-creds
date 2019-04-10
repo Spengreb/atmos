@@ -1,3 +1,7 @@
 [default]
 
-[ldm-preprod]
+[preprod]
+
+[production]
+
+[qa]
