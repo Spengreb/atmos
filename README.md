@@ -24,16 +24,25 @@ Atmos requires the following file structure
     └── qa.tfvars
 ```
 
-The vars directory is scanned by atmos and matches the current workspace to the vars file. If the workspace is not found it defaults to the qa environment. This is to ensure qa branches are deployed similarily without having to create a var file for each new branch. 
+The vars directory is scanned by atmos and matches the current workspace to the vars file. If the workspace is not found it defaults to the qa environment. This is to ensure qa branches are deployed similarily without having to create a var file for each new branch.
 
 # AWS Credentials
 
 To get the most out of Terraform workspaces it is recommended that the AWS provider uses the profile attribute.
 
 ```
+# main.tf
 provider "aws" {
     region = "${var.region}"
-    profile = "${terraform.workspace}"
+    profile = "${var.workspace}"
+}
+```
+
+```
+# variables.tf
+variable "workspace" {
+    type = "string"
+    default = "default"
 }
 ```
 
