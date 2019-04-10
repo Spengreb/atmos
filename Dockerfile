@@ -7,3 +7,4 @@ RUN mv terraform /usr/bin/
 
 COPY shared-creds /root/.aws/credentials
 COPY atmos.py /usr/bin/atmos
+COPY atmos.config /root/.config/atmos.config
