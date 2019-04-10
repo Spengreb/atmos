@@ -18,7 +18,7 @@ def determine_actions(args, params):
         cmd = cmd + ' ' + param
 
     if (args.command in env_actions) and (get_env() != "master"): # Append with env context
-        cmd = cmd + ' -var-file=vars/{env}.tfvars'.format(env=get_env())
+        cmd = cmd + ' -var-file=vars/{env}.tfvars -var "workspace={env}"'.format(env=get_env())
 
     print('Terraform {args} using env vars in {env}'.format(args=args.command, env=get_env()))
     with subprocess.Popen(shlex.split(cmd)) as proc:
