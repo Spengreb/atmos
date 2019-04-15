@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse, subprocess, shlex, sys, os, glob
-from jinja2 import Environment, FileSystemLoader
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Control Terraform Workspaces.')
