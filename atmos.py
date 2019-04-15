@@ -39,8 +39,8 @@ def generate_creds():
     contents = ""
     for workspace in workspaces:
         contents = contents + "[{workspace}]\n".format(workspace=workspace)
-        contents = contents + "access_key_id=" + os.environ.get(workspace.upper() + '_ACCESS_KEY_ID') + "\n"
-        contents = contents + "secret_access_key=" + os.environ.get(workspace.upper() + '_SECRET_ACCESS_KEY') + "\n"
+        contents = contents + "aws_access_key_id=" + os.environ.get(workspace.upper() + '_ACCESS_KEY_ID') + "\n"
+        contents = contents + "aws_secret_access_key=" + os.environ.get(workspace.upper() + '_SECRET_ACCESS_KEY') + "\n"
     with open(os.path.expanduser('~/.aws/credentials'), 'w+') as f:
         f.write(contents)
 
