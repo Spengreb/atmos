@@ -47,3 +47,24 @@ variable "workspace" {
 ```
 
 This will make Terraform lookup AWS credentials from the `~/.aws/credentials` file using the workspace name as the stanza name. For example the credentials file would look like the shared-creds file in this repo.
+
+## atmos -t
+
+Adding the `-t` flag to atmos will make it generate a new `~/.aws/credentials` file from environment variables. You must first include the `default` access key ID & secret access key like this:
+
+```
+DEFAULT_ACCESS_KEY_ID=id
+DEFAULT_SECRET_ACCESS_KEY=key
+```
+
+All additional workspaces need to be prefixed in the same way:
+
+```
+DEV_ACCESS_KEY_ID=id
+DEV_SECRET_ACCESS_KEY=key
+
+QA_ACCESS_KEY_ID=id
+QA_SECRET_ACCESS_KEY=key
+```
+
+Note: Atmos will override your default credentials file as this functionality is for use in a docker container or in situations where you would rather use variables.
