@@ -42,8 +42,7 @@ def generate_creds():
         contents = contents + "[{workspace}]\n".format(workspace=workspace)
         contents = contents + "access_key_id=" + os.environ.get(workspace.upper() + '_ACCESS_KEY_ID') + "\n"
         contents = contents + "secret_access_key=" + os.environ.get(workspace.upper() + '_SECRET_ACCESS_KEY') + "\n"
-    print(contents)
-    with open(os.path.expanduser('~/.aws/credentials'), 'w+') as f:
+    with open(os.path.expanduser('~/.aws/credentials.atmos'), 'w+') as f:
         f.write(contents)
 
 def get_valid_envs():
