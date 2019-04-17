@@ -6,7 +6,7 @@ def main(argv):
     parser = argparse.ArgumentParser(description='Control Terraform Workspaces.')
     g = parser.add_mutually_exclusive_group()
     g.add_argument("command", help="Send commands to terraform with workspace variable context", nargs='?', default=False)
-    parser.add_argument("-t", help="Template mode, gather shared-creds from environment variables (Dont use this flag if you dont want your ~/.aws/credentials replaced. This is for CI/CD", action='store_true', default=False)
+    parser.add_argument("-e", help="Template mode, gather shared-creds from environment variables (Dont use this flag if you dont want your ~/.aws/credentials replaced. This is for CI/CD", action='store_true', default=False)
     args, params = parser.parse_known_args()
     if args.command:
         determine_actions(args, params)
@@ -23,7 +23,7 @@ def determine_actions(args, params):
     if (args.command in env_actions) and (workspace != "default"): # Append with env context
         cmd = cmd + ' -var-file=vars/{env}.tfvars -var "workspace={env}"'.format(env=workspace)
 
-    if (args.t):
+    if (args.e):
         generate_creds()
     
     print('Terraform {args} using env vars in {env}'.format(args=args.command, env=workspace))
