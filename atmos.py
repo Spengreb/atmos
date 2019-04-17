@@ -12,6 +12,7 @@ def main(argv):
         determine_actions(args, params)
 
 def determine_actions(args, params):
+    workspace_manager()
     workspace = get_env()
     env_actions = ["plan", "apply", "destroy"] # Commands that require env context
     cmd = 'terraform {args}'.format(args=args.command)
@@ -24,10 +25,30 @@ def determine_actions(args, params):
 
     if (args.t):
         generate_creds()
-
+    
     print('Terraform {args} using env vars in {env}'.format(args=args.command, env=workspace))
     with subprocess.Popen(shlex.split(cmd)) as proc:
         exit # Start process but kill py program
+
+def workspace_manager():
+    if is_git_directory != False:
+        branch = subprocess.getoutput("git rev-parse --abbrev-ref HEAD")
+        if branch == "master":
+            branch = "default"
+        else:
+            if branch not in get_valid_envs():
+                branch = "qa"
+
+        if get_env() != branch:
+            print("WARNING: Terraform workspace & git branch have diverged. Changing workspace to git branch...")
+            subprocess.call(["terraform", "workspace", "new", branch], stderr=subprocess.STDOUT, stdout=open(os.devnull, 'w'))
+            subprocess.call(["terraform", "workspace", "select", branch], stderr=subprocess.STDOUT, stdout=open(os.devnull, 'w'))
+
+def is_git_directory(path = '.'):
+    if subprocess.call(["git", "branch"], stderr=subprocess.STDOUT, stdout=open(os.devnull, 'w')) != 0:
+        return(False)
+    else:
+        return(True)
 
 def generate_creds():
     current_workspace = get_env()
