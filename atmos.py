@@ -14,8 +14,6 @@ def main(argv):
 
 def determine_actions(args, params):
     if (is_git_directory()) and not (args.m):
-        print(args.m)
-        print(is_git_directory())
         workspace_manager()
 
     workspace = get_env()
