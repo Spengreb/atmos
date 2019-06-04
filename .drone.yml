@@ -6,3 +6,11 @@ steps:
   image: python
   commands:
   - ./atmos.py --help
+- name: docker
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_user
+    password:
+      from_secret: docker_password
+    dockerfile: Dockerfile
