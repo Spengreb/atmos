@@ -23,7 +23,7 @@ def determine_actions(args, params):
     for param in params: # Pass terraform params directly through
         cmd = cmd + ' ' + param
 
-    if (args.command in env_actions) and (workspace != "default"): # Append with env context
+    if (args.command in env_actions): # Append with env context
         cmd = cmd + ' -var-file=vars/{env}.tfvars -var "workspace={env}"'.format(env=workspace)
 
     if (args.e):
