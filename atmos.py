@@ -8,6 +8,7 @@ def main(argv):
     g.add_argument("command", help="Send commands to terraform with workspace variable context", nargs='?', default=False)
     parser.add_argument("-e", help="Gather shared-creds from environment variables (Dont use this flag if you dont want your ~/.aws/credentials replaced. This is for CI/CD", action='store_true', default=False)
     parser.add_argument("-m", help="Prevents workspace from changing with git branches automatically", action='store_true', default=False)
+    parser.add_argument("-p", help="Prevents workspace from changing with git branches automatically", action='store_true', default=False)
     args, params = parser.parse_known_args()
     if args.command:
         determine_actions(args, params)
@@ -20,11 +21,11 @@ def determine_actions(args, params):
     env_actions = ["plan", "apply", "destroy"] # Commands that require env context
     cmd = 'terraform {args}'.format(args=args.command)
 
+    if (args.command in env_actions) and not (args.p): # Append with env context
+        cmd = cmd + ' -var-file=vars/{env}.tfvars -var "workspace={env}"'.format(env=workspace)
+
     for param in params: # Pass terraform params directly through
         cmd = cmd + ' ' + param
-
-    if (args.command in env_actions): # Append with env context
-        cmd = cmd + ' -var-file=vars/{env}.tfvars -var "workspace={env}"'.format(env=workspace)
 
     if (args.e):
         generate_creds()
