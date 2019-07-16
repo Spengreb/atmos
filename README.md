@@ -36,6 +36,7 @@ To get the most out of Terraform workspaces it is recommended that the AWS provi
 provider "aws" {
     region = "${var.region}"
     profile = "${var.workspace}"
+    shared_credentials_file = ${var.shared_credentials_file}
 }
 ```
 
@@ -51,7 +52,7 @@ This will make Terraform lookup AWS credentials from the `~/.aws/credentials` fi
 
 ## atmos -e
 
-Adding the `-e` flag to atmos will make it generate a new `~/.aws/credentials` file from environment variables. You must first include the `default` access key ID & secret access key like this:
+Adding the `-e` flag to atmos will make it generate a new `~/.aws/credentials-atmos` file from environment variables. You must first include the `default` access key ID & secret access key like this:
 
 ```
 DEFAULT_ACCESS_KEY_ID=id
@@ -68,7 +69,7 @@ QA_ACCESS_KEY_ID=id
 QA_SECRET_ACCESS_KEY=key
 ```
 
-Note: Atmos will override your default credentials file as this functionality is for use in a docker container or in situations where you would rather use variables.
+This requires a `shared_credentials_file` variable on the top level. To support standard Terraform workflows its recommened to default this to the default shared credentials file location `$HOME/.aws/credentials`. Atmos will then handle the overriding safely in the background
 
 # atmos -m
 

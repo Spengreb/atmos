@@ -14,7 +14,9 @@ def main(argv):
         determine_actions(args, params)
 
 def determine_actions(args, params):
+    aws_creds_file = "$HOME/.aws/credentials"
     if (is_git_directory()) and not (args.m):
+        aws_creds_file = aws_creds_file + "-atmos"
         workspace_manager()
 
     workspace = get_env()
@@ -22,7 +24,7 @@ def determine_actions(args, params):
     cmd = 'terraform {args}'.format(args=args.command)
 
     if (args.command in env_actions) and not (args.p): # Append with env context
-        cmd = cmd + ' -var-file=vars/{env}.tfvars -var "workspace={env}"'.format(env=workspace)
+        cmd = cmd + ' -var-file=vars/{env}.tfvars -var "workspace={env}" -var "shared_credentials_file={aws_creds_file}"'.format(env=workspace, aws_creds_file=aws_creds_file)
 
     for param in params: # Pass terraform params directly through
         cmd = cmd + ' ' + param
@@ -62,7 +64,7 @@ def generate_creds():
         contents = contents + "[{workspace}]\n".format(workspace=workspace)
         contents = contents + "aws_access_key_id=" + os.environ.get(workspace.upper() + '_ACCESS_KEY_ID') + "\n"
         contents = contents + "aws_secret_access_key=" + os.environ.get(workspace.upper() + '_SECRET_ACCESS_KEY') + "\n"
-    with open(os.path.expanduser('~/.aws/credentials'), 'w+') as f:
+    with open(os.path.expanduser('~/.aws/credentials-atmos'), 'w+') as f:
         f.write(contents)
 
 def get_valid_envs():
