@@ -6,6 +6,19 @@ Atmos is a thin wrapper for managing Terraform Workspaces easily. Using the work
 
 # Quick Start
 
+## Local Use
+
+Atmos requires terraform to be installed on your system. 
+
+- Clone this atmos project
+- Symlink atmos.py to your /usr/bin/ `$ ln -s $(pwd)/atmos.py /usr/bin/atmos`
+- Set up your `~/.aws/credentials` to include a `[default]` stanza which is where your S3 backend storage is. 
+- Setup other stanzas in your credentials file for each environment you want. For example `[dev]` with your dev account IAM credentials
+- You can also setup environment variables and use the -e flag. See below for more.
+- Use `$ atmos apply/plan/destroy` to run terraform apply whilst maintaining environment context
+
+## CI/DE
+
 - Build the atmos image
 - Use atmos as the build image in your CI/CD
 - Include switching/creating terraform workspaces
@@ -74,3 +87,23 @@ This requires a `shared_credentials_file` variable on the top level. To support 
 # atmos -m
 
 Adding `-m` flag will set to manual mode. It will not try to automatically switch workspace per branch. It will adhere to whatever you last set the workspace to.
+
+# atmos -p 
+
+Adding `-p` flag will set the project prefix when looking for credentials. 
+
+Example:
+` $ atmos -e -p PROJ plan`
+
+Will make atmos look for environment vars with the prefix 'VER' selecting the following env vars. 
+
+```
+PROJ_DEV_ACCESS_KEY_ID
+PROJ_DEV_SECRET_ACCESS_KEY
+```
+
+Note this also works on the `.aws/credentials` file
+
+# atmos -v
+
+Verbose output mode, will show the vars atmos has selected and some environment context
