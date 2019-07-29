@@ -83,8 +83,16 @@ def generate_creds(args):
             print(secret_key_name)
 
         contents = contents + "[{workspace}]\n".format(workspace=workspace)
-        contents = contents + "aws_access_key_id=" + os.environ.get(access_key_name) + "\n"
-        contents = contents + "aws_secret_access_key=" + os.environ.get(secret_key_name) + "\n"
+        try:
+            contents = contents + "aws_access_key_id=" + os.environ.get(access_key_name) + "\n"
+        except:
+            print("[ERROR]: Env Variable " + access_key_name + " not found.")
+            sys.exit(1)
+        try:
+            contents = contents + "aws_secret_access_key=" + os.environ.get(secret_key_name) + "\n"
+        except:
+            print("[ERROR]: Env Variable " + secret_key_name + " not found.")
+            sys.exit(1)
     with open(os.path.expanduser('~/.aws/credentials-atmos'), 'w+') as f:
         f.write(contents)
 
