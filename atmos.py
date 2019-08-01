@@ -22,15 +22,17 @@ def determine_actions(args, params):
             aws_creds_file = aws_creds_file + "-atmos"
         workspace_manager()
 
-    if (args.project) and (args.verbose):
-        print("Project: " + args.project)
-
     workspace = get_env()
-    env_actions = ["plan", "apply", "destroy"] # Commands that require env context
+    workspace_vars = workspace
+    if (args.project):
+        workspace = args.project + "_" + workspace
+
+    env_actions = ["init", "plan", "apply", "destroy"] # Commands that require env context
     cmd = 'terraform {args}'.format(args=args.command)
 
     if (args.command in env_actions) and not (args.n): # Append with env context
-        cmd = cmd + ' -var-file=vars/{env}.tfvars -var "workspace={env}"'.format(env=workspace)
+        cmd = cmd + ' -var-file=vars/{env}.tfvars'.format(env=workspace_vars) 
+        cmd = cmd + ' -var "workspace={env}"'.format(env=workspace)
         cmd = cmd + ' -var "shared_credentials_file={aws_creds_file}"'.format(aws_creds_file=aws_creds_file)
 
     for param in params: # Pass terraform params directly through
@@ -42,7 +44,7 @@ def determine_actions(args, params):
     if (args.verbose):
         print("Atmos will run: " + cmd)
 
-    print('Terraform {args} using env vars in {env}'.format(args=args.command, env=workspace))
+    print('Terraform {args} using env vars in {env}'.format(args=args.command, env=workspace_vars))
     with subprocess.Popen(shlex.split(cmd)) as proc:
         exit # Start process but kill py program
 
