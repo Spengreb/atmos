@@ -5,5 +5,6 @@ RUN wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.12.6/t
 RUN unzip /tmp/terraform.zip 
 RUN mv terraform /usr/bin/
 
+COPY git-askpass-helper.sh /usr/bin/git-pass
 COPY shared-creds /root/.aws/credentials
 COPY atmos.py /usr/bin/atmos
