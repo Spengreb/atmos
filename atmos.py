@@ -25,7 +25,7 @@ def determine_actions(args, params):
     workspace = get_env()
     workspace_vars = workspace
     if (args.project):
-        workspace = args.project + "_" + workspace
+        workspace = args.project + "-" + workspace
 
     env_actions = ["init", "plan", "apply", "destroy"] # Commands that require env context
     cmd = 'terraform {args}'.format(args=args.command)
@@ -73,7 +73,7 @@ def generate_creds(args):
 
     project_name = ""
     if (args.project):
-        project_name = args.project.upper() + "_"
+        project_name = args.project.upper() + "-"
 
     contents = ""
     for workspace in workspaces:
@@ -84,7 +84,7 @@ def generate_creds(args):
             print(access_key_name)
             print(secret_key_name)
 
-        contents = contents + "[{workspace}]\n".format(workspace=workspace)
+        contents = contents + "[{workspace}]\n".format(workspace=project_name + workspace)
         try:
             contents = contents + "aws_access_key_id=" + os.environ.get(access_key_name) + "\n"
         except:
