@@ -57,7 +57,7 @@ def workspace_manager():
         branch = "default"
     else:
         if branch not in get_valid_envs():
-            branch = "qa"
+            branch = "default"
 
     if get_env() != branch:
         print("[INFO]: Terraform workspace & git branch have diverged. Changing workspace to git branch...")
@@ -100,20 +100,22 @@ def generate_creds(args):
 
 def get_valid_envs():
     try:
-        # Use var files when present, otherwise default to qa
+        # Use var files when present, otherwise default to default
         return [os.path.splitext(os.path.basename(x))[0] for x in glob.glob("vars/*.tfvars")]
     except FileNotFoundError:
         return False
 
 def get_env():
     try:
-        tf_env = open('.terraform/environment', 'r').read()
+        tf_env = ""
+        with open('.terraform/environment', 'r') as f:
+            tf_env = f.readline()
     except:
         return("default")
     if str(tf_env) in get_valid_envs():
         return(tf_env)
     else:
-        return("qa")
+        return("default")
 
 if __name__ == "__main__":
     main(sys.argv)
