@@ -17,7 +17,7 @@ Atmos requires terraform to be installed on your system.
 - You can also setup environment variables and use the -e flag. See below for more.
 - Use `$ atmos apply/plan/destroy` to run terraform apply whilst maintaining environment context
 
-## CI/DE
+## CI/CD
 
 - Build the atmos image
 - Use atmos as the build image in your CI/CD
