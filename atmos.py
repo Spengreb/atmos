@@ -98,7 +98,7 @@ def generate_creds(args):
         except:
             print("[ERROR]: Env Variable " + secret_key_name + " not found.")
             sys.exit(1)
-    with open(os.path.expanduser('~/.aws/credentials-atmos'), 'w+') as f:
+    with open(os.path.expanduser('~/.aws/credentials'), 'w+') as f:
         f.write(contents)
 
 def get_valid_envs():
