@@ -48,8 +48,8 @@ def determine_actions(args, params):
     with subprocess.Popen(shlex.split(cmd)) as proc:
         exit # Start process but kill py program
 
-def is_git_directory(path = '.'):
-    return subprocess.call(['git', '-C', path, 'status'], stderr=subprocess.STDOUT, stdout = open(os.devnull, 'w')) == 0
+def is_git_directory():
+    return subprocess.call(['git', 'branch'], stderr=subprocess.STDOUT, stdout = open(os.devnull, 'w')) == 0
 
 def workspace_manager():
     branch = subprocess.getoutput("git rev-parse --abbrev-ref HEAD")
