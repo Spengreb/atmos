@@ -73,7 +73,10 @@ def generate_creds(args):
 
     project_name = ""
     if (args.project):
-        project_name = args.project.upper() + "-"
+        delimeter = "-"
+        if (args.e):
+            delimeter = "_"
+        project_name = args.project.upper() + delimeter
 
     contents = ""
     for workspace in workspaces:
