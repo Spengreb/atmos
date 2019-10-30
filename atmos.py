@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse, subprocess, shlex, sys, os, glob
+import workspaces
+import credentials
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Control Terraform Workspaces.')
@@ -20,9 +22,9 @@ def determine_actions(args, params):
     if (is_git_directory()) and not (args.m):
         if (args.e):
             aws_creds_file = aws_creds_file + "-atmos"
-        workspace_manager()
+        workspaces.workspace_manager()
 
-    workspace = get_env()
+    workspace = workspaces.get_env()
     workspace_vars = workspace
     if (args.project):
         workspace = args.project + "-" + workspace
@@ -39,86 +41,20 @@ def determine_actions(args, params):
         cmd = cmd + ' ' + param
 
     if (args.e):
-        generate_creds(args)
+        credentials.generate(args)
 
     if (args.verbose):
         print("Atmos will run: " + cmd)
-
     print('Terraform {args} using env vars in {env}'.format(args=args.command, env=workspace_vars))
+    run_cmd(cmd)
+
+def run_cmd(cmd):
     with subprocess.Popen(shlex.split(cmd)) as proc:
         exit # Start process but kill py program
 
 def is_git_directory():
     return subprocess.call(['git', 'branch'], stderr=subprocess.STDOUT, stdout = open(os.devnull, 'w')) == 0
 
-def workspace_manager():
-    branch = subprocess.getoutput("git rev-parse --abbrev-ref HEAD")
-    if branch == "master":
-        branch = "default"
-    else:
-        if branch not in get_valid_envs():
-            branch = "default"
-
-    if get_env() != branch:
-        print("[INFO]: Terraform workspace & git branch have diverged. Changing workspace to git branch...")
-        subprocess.call(["terraform", "workspace", "new", branch], stderr=subprocess.STDOUT, stdout=open(os.devnull, 'w'))
-        subprocess.call(["terraform", "workspace", "select", branch], stderr=subprocess.STDOUT, stdout=open(os.devnull, 'w'))
-
-def generate_creds(args):
-    current_workspace = get_env()
-    workspaces = ['default']
-
-    if current_workspace != 'default':
-        workspaces.append(current_workspace)
-
-    project_name = ""
-    if (args.project):
-        delimeter = "-"
-        if (args.e):
-            delimeter = "_"
-        project_name = args.project.upper() + delimeter
-
-    contents = ""
-    for workspace in workspaces:
-        access_key_name = project_name + workspace.upper() + '_ACCESS_KEY_ID'
-        secret_key_name = project_name + workspace.upper() + '_SECRET_ACCESS_KEY'
-
-        if (args.verbose):
-            print(access_key_name)
-            print(secret_key_name)
-
-        contents = contents + "[{workspace}]\n".format(workspace=project_name + workspace)
-        try:
-            contents = contents + "aws_access_key_id=" + os.environ.get(access_key_name) + "\n"
-        except:
-            print("[ERROR]: Env Variable " + access_key_name + " not found.")
-            sys.exit(1)
-        try:
-            contents = contents + "aws_secret_access_key=" + os.environ.get(secret_key_name) + "\n"
-        except:
-            print("[ERROR]: Env Variable " + secret_key_name + " not found.")
-            sys.exit(1)
-    with open(os.path.expanduser('~/.aws/credentials'), 'w+') as f:
-        f.write(contents)
-
-def get_valid_envs():
-    try:
-        # Use var files when present, otherwise default to default
-        return [os.path.splitext(os.path.basename(x))[0] for x in glob.glob("vars/*.tfvars")]
-    except FileNotFoundError:
-        return False
-
-def get_env():
-    try:
-        tf_env = ""
-        with open('.terraform/environment', 'r') as f:
-            tf_env = f.readline()
-    except:
-        return("default")
-    if str(tf_env) in get_valid_envs():
-        return(tf_env)
-    else:
-        return("default")
 
 if __name__ == "__main__":
     main(sys.argv)
