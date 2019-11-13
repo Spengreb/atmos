@@ -26,7 +26,7 @@ def determine_actions(args, params):
 
     workspace = workspaces.get_env()
     workspace_vars = workspace
-    if (args.project):
+    if (args.project) and workspace != 'default':
         workspace = args.project + "-" + workspace
 
     env_actions = ["init", "plan", "apply", "destroy"] # Commands that require env context
