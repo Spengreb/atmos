@@ -1,4 +1,4 @@
-import workspaces, sys
+import workspaces, sys, os
 
 def generate(args):
     current_workspace = workspaces.get_env()
@@ -9,9 +9,7 @@ def generate(args):
 
     project_name = ""
     if (args.project):
-        delimeter = "-"
-        if (args.e):
-            delimeter = "_"
+        delimeter = "_"
         project_name = args.project.upper() + delimeter
 
     contents = ""
@@ -23,7 +21,11 @@ def generate(args):
             print(access_key_name)
             print(secret_key_name)
 
-        contents = contents + "[{workspace}]\n".format(workspace=project_name + workspace)
+        if (workspace == 'default'):
+            contents = contents + "[{workspace}]\n".format(workspace=(workspace).lower())
+        else:
+            contents = contents + "[{workspace}]\n".format(workspace=(project_name.replace("_", "-") + workspace).lower())
+
         try:
             contents = contents + "aws_access_key_id=" + os.environ.get(access_key_name) + "\n"
         except:

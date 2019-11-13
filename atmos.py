@@ -20,8 +20,8 @@ def main(argv):
 def determine_actions(args, params):
     aws_creds_file = "$HOME/.aws/credentials"
     if (is_git_directory()) and not (args.m):
-        if (args.e):
-            aws_creds_file = aws_creds_file + "-atmos"
+        # if (args.e):
+        #     aws_creds_file = aws_creds_file + "-atmos"
         workspaces.workspace_manager()
 
     workspace = workspaces.get_env()
