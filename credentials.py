@@ -1,3 +1,5 @@
+import workspaces, sys
+
 def generate(args):
     current_workspace = workspaces.get_env()
     workspaces_names = ['default']
