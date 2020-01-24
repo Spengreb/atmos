@@ -3,6 +3,8 @@ import workspaces, sys, os
 def generate(args):
     current_workspace = workspaces.get_env()
     workspaces_names = ['default']
+    aws_creds_dir = '~/.aws'
+    aws_creds_file = 'credentials'
 
     if current_workspace != 'default':
         workspaces_names.append(current_workspace)
@@ -36,11 +38,14 @@ def generate(args):
         except:
             print("[ERROR]: Env Variable " + secret_key_name + " not found.")
             sys.exit(1)
-    with open(os.path.expanduser('~/.aws/credentials'), 'w+') as f:
-        if os.path.isfile(f.name):
-            answer = input("Found aws creds file already, do you want to override? [y/n]")
-            if not answer or answer[0].lower() != 'y':
-                print("File not changed. This flag is for CI/CD only")
-                exit(1)
-            else:
-                f.write(contents)
+
+    if os.path.isfile(aws_creds_dir + aws_creds_file):
+        answer = input("Found aws creds file already, do you want to override? [y/n]")
+        if not answer or answer[0].lower() != 'y':
+            print("File not changed. This flag is for CI/CD only")
+            exit(1)
+    else:
+        os.makedirs(os.path.expanduser(aws_creds_dir))
+
+    with open(os.path.expanduser(aws_creds_dir + aws_creds_file), 'w+') as f:
+        f.write(contents)
