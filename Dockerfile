@@ -7,4 +7,7 @@ RUN mv terraform /usr/bin/
 
 COPY git-askpass-helper.sh /usr/bin/git-pass
 COPY shared-creds /root/.aws/credentials
-COPY atmos.py /usr/bin/atmos
+
+RUN mkdir /atmos
+COPY atmos.py credentials.py workspaces.py /atmos/
+RUN ln -s /atmos/atmos.py /usr/bin/atmos
