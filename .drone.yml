@@ -17,4 +17,4 @@ steps:
     repo: spengreb/atmos
     tags: 
       - latest
-      - "0.12.6"
+      - "0.12.20"
