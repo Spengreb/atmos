@@ -1,7 +1,7 @@
-FROM ubuntu:xenial
+FROM python:latest
 
-RUN apt-get update -y && apt-get install -y python3 wget unzip git
-RUN wget -O /tmp/terraform.zip https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip
+RUN apt update && apt install -y jq
+RUN wget -O /tmp/terraform.zip `echo "https://releases.hashicorp.com/terraform/$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')/terraform_$(curl -s https://checkpoint-api.hashicorp.com/v1/check/terraform | jq -r -M '.current_version')_linux_amd64.zip"`
 RUN unzip /tmp/terraform.zip 
 RUN mv terraform /usr/bin/
 
