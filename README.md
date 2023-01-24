@@ -65,7 +65,7 @@ This will make Terraform lookup AWS credentials from the `~/.aws/credentials` fi
 
 ## atmos -e
 
-Adding the `-e` flag to atmos will make it generate a new `~/.aws/credentials-atmos` file from environment variables. You must first include the `default` access key ID & secret access key like this:
+Adding the `-e` flag to atmos will make it generate a new `~/.aws/credentials` file from environment variables. You must first include the `default` access key ID & secret access key like this:
 
 ```
 DEFAULT_ACCESS_KEY_ID=id
@@ -81,8 +81,6 @@ DEV_SECRET_ACCESS_KEY=key
 QA_ACCESS_KEY_ID=id
 QA_SECRET_ACCESS_KEY=key
 ```
-
-This requires a `shared_credentials_file` variable on the top level. To support standard Terraform workflows its recommened to default this to the default shared credentials file location `$HOME/.aws/credentials`. Atmos will then handle the overriding safely in the background
 
 # atmos -m
 

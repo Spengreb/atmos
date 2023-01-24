@@ -40,8 +40,8 @@ def generate(args):
             print("[ERROR]: Env Variable " + secret_key_name + " not found.")
             sys.exit(1)
 
-    if os.path.isfile(aws_creds_full):
-        answer = input("Found aws creds file already, do you want to override? [y/n]")
+    if os.path.isfile(os.path.expanduser(aws_creds_full)):
+        answer = input(f"[WARNING] File {aws_creds_full} already exists. Atmos will generate a new credentials file from your env vars. \nDo you want to override {aws_creds_full}? [y/N]")
         if not answer or answer[0].lower() != 'y':
             print("File not changed. This flag is for CI/CD only")
             exit(1)
