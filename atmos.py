@@ -8,7 +8,7 @@ def main(argv):
     parser = argparse.ArgumentParser(description='Control Terraform Workspaces.')
     g = parser.add_mutually_exclusive_group()
     g.add_argument("command", help="Send commands to terraform with workspace variable context", nargs='?', default=False)
-    parser.add_argument("-e", help="Gather shared-creds from environment variables (Dont use this flag if you dont want your ~/.aws/credentials replaced.) This is for CI/CD", action='store_true', default=False)
+    parser.add_argument("-e", help="Gather shared-creds from environment variables. This is for CI/CD", action='store_true', default=False)
     parser.add_argument("-m", help="Prevents workspace from changing with git branches automatically", action='store_true', default=False)
     parser.add_argument("-n", help="Atmos will not add -var-file or -var args to terraform", action='store_true', default=False)
     parser.add_argument("-p", "--project", help="Add a project prefix for env vars", nargs='?', default="")
