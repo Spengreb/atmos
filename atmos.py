@@ -35,7 +35,6 @@ def determine_actions(args, params):
     if (args.command in env_actions) and not (args.n): # Append with env context
         cmd = cmd + ' -var-file=vars/{env}.tfvars'.format(env=workspace_vars) 
         cmd = cmd + ' -var "workspace={env}"'.format(env=workspace)
-        cmd = cmd + ' -var "shared_credentials_file={aws_creds_file}"'.format(aws_creds_file=aws_creds_file)
 
     for param in params: # Pass terraform params directly through
         cmd = cmd + ' ' + param

@@ -49,7 +49,6 @@ To get the most out of Terraform workspaces it is recommended that the AWS provi
 provider "aws" {
     region = "${var.region}"
     profile = "${var.workspace}"
-    shared_credentials_file = ${var.shared_credentials_file}
 }
 ```
 
@@ -61,7 +60,7 @@ variable "workspace" {
 }
 ```
 
-This will make Terraform lookup AWS credentials from the `~/.aws/credentials` file using the workspace name as the stanza name. For example the credentials file would look like the shared-creds file in this repo.
+This will make Terraform lookup AWS credentials from the `~/.aws/credentials` file using the workspace name as the stanza name. 
 
 ## atmos -e
 

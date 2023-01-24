@@ -22,35 +22,35 @@ class DetermineActionsTests(unittest.TestCase):
 
     @patch("workspaces.get_env")
     def test_whenCalledWithInitCommand_shouldAppendVarsAndCreds(self, mocked_get_env):
-        """Case where var-file, -var workpace=xyz and -var shared_credentials is appended"""
+        """Case where var-file, -var workpace=xyz is appended"""
         self.input_args.command = "init"
         mocked_get_env.return_value = "mytestenv"
         atmos.determine_actions(self.input_args, [])
-        atmos.run_cmd.assert_called_with('terraform init -var-file=vars/mytestenv.tfvars -var "workspace=mytestenv" -var "shared_credentials_file=$HOME/.aws/credentials"')
+        atmos.run_cmd.assert_called_with('terraform init -var-file=vars/mytestenv.tfvars -var "workspace=mytestenv"')
 
     @patch("workspaces.get_env")
     def test_whenCalledWithPlanCommand_shouldAppendVarsAndCreds(self, mocked_get_env):
-        """Case where var-file, -var workpace=xyz and -var shared_credentials is appended"""
+        """Case where var-file, -var workpace=xyz is appended"""
         self.input_args.command = "plan"
         mocked_get_env.return_value = "mytestenv"
         atmos.determine_actions(self.input_args, [])
-        atmos.run_cmd.assert_called_with('terraform plan -var-file=vars/mytestenv.tfvars -var "workspace=mytestenv" -var "shared_credentials_file=$HOME/.aws/credentials"')
+        atmos.run_cmd.assert_called_with('terraform plan -var-file=vars/mytestenv.tfvars -var "workspace=mytestenv"')
 
     @patch("workspaces.get_env")
     def test_whenCalledWithApplyCommand_shouldAppendVarsAndCreds(self, mocked_get_env):
-        """Case where var-file, -var workpace=xyz and -var shared_credentials is appended"""
+        """Case where var-file, -var workpace=xyz is appended"""
         self.input_args.command = "apply"
         mocked_get_env.return_value = "mytestenv"
         atmos.determine_actions(self.input_args, [])
-        atmos.run_cmd.assert_called_with('terraform apply -var-file=vars/mytestenv.tfvars -var "workspace=mytestenv" -var "shared_credentials_file=$HOME/.aws/credentials"')
+        atmos.run_cmd.assert_called_with('terraform apply -var-file=vars/mytestenv.tfvars -var "workspace=mytestenv"')
 
     @patch("workspaces.get_env")
     def test_whenCalledWithDestroyCommand_shouldAppendVarsAndCreds(self, mocked_get_env):
-        """Case where var-file, -var workpace=xyz and -var shared_credentials is appended"""
+        """Case where var-file, -var workpace=xyz is appended"""
         self.input_args.command = "destroy"
         mocked_get_env.return_value = "mytestenv"
         atmos.determine_actions(self.input_args, [])
-        atmos.run_cmd.assert_called_with('terraform destroy -var-file=vars/mytestenv.tfvars -var "workspace=mytestenv" -var "shared_credentials_file=$HOME/.aws/credentials"')
+        atmos.run_cmd.assert_called_with('terraform destroy -var-file=vars/mytestenv.tfvars -var "workspace=mytestenv"')
 
     @patch("workspaces.workspace_manager")
     def test_whenInAGitRepo_andManualArgIsNotGiven_andEnvironmentArgIsNotGiven_shouldCallTheWorkspaceManager(self, mocked_workspace_manager):
